@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>关于 Hexo+Gitub 搭建静态博客相关问题 | 空谷小屋 | 空山新雨后，天气晚来秋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Hexo,博客">
+    <meta name="description" content="本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉都是自己人生中挺不错的宝贵经验，所以喜欢记录下来，夜半无人时总是翻开看看自己成长历程。">
+<meta name="keywords" content="Hexo,博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 Hexo+Gitub 搭建静态博客相关问题">
+<meta property="og:url" content="http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/index.html">
+<meta property="og:site_name" content="空谷小屋">
+<meta property="og:description" content="本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉都是自己人生中挺不错的宝贵经验，所以喜欢记录下来，夜半无人时总是翻开看看自己成长历程。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://s2.ax1x.com/2019/06/05/VNOj1I.png">
+<meta property="og:updated_time" content="2019-06-05T07:11:03.867Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 Hexo+Gitub 搭建静态博客相关问题">
+<meta name="twitter:description" content="本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉都是自己人生中挺不错的宝贵经验，所以喜欢记录下来，夜半无人时总是翻开看看自己成长历程。">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/06/05/VNOj1I.png">
+    
+    <link rel="shortcut icon" href="/static_blog/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/static_blog/img/brand.jpg)">
+      <div class="brand">
+        <a href="/static_blog/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/static_blog/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">lanxuewei</h5>
+          <a href="mailto:lanxueweilove@qq.com" title="lanxueweilove@qq.com" class="mail">lanxueweilove@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/lanxuewei" target="_blank">
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://weibo.com/lanxueweilove" target="_blank">
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/test">
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">关于 Hexo+Gitub 搭建静态博客相关问题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">关于 Hexo+Gitub 搭建静态博客相关问题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-06-03T11:49:13.731Z" itemprop="datePublished" class="page-time">
+  2019-06-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/技术/">技术</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-关于 Hexo+Gitub 搭建静态博客相关问题-03" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">关于 Hexo+Gitub 搭建静态博客相关问题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-06-03 19:49:13" datetime="2019-06-03T11:49:13.731Z" itemprop="datePublished">2019-06-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/技术/">技术</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style="display:none">
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>  本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉都是自己人生中挺不错的宝贵经验，所以喜欢记录下来，夜半无人时总是翻开看看自己成长历程。</p>
+<a id="more"></a>
+<p>  搭建静态博客我们可以使用 Hexo+码云或者Gitub，两者都可以，但是作者选择的是码云，首先支持国产，其次Gitub有时候访问速度实在是不敢恭维。关于介绍如何搭建博客问题，这篇博客说的非常详细：</p>
+<blockquote>
+<p><a href="https://z77z.oschina.io/2017/01/14/%E5%85%8D%E8%B4%B9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B%EF%BC%88%E8%AF%A6%E7%BB%86-%E5%9B%BE%E6%96%87%EF%BC%89--Hexo+OSChina/" target="_blank" rel="noopener">使用Hexo+Gitub搭建静态博客</a></p>
+</blockquote>
+<p>  因为作者也是照着这篇博客进行搭建的，所以这里就不把文章copy过来，这里说几个遇到的问题以及如何解决的就好了。</p>
+<p><strong>问题1：在本地启动后一切正常，但是部署到Gitub或者码云之后，css样式丢失。</strong></p>
+<p>  通过 F12 发现所有获取 css 的路径错误，我的码云项目名为 static_blog ，但是 css 都少了这一层路径，例：<a href="https://lanxuewei.gitee.io/static_blog/css/style.css" target="_blank" rel="noopener">https://lanxuewei.gitee.io/css/style.css</a>，加上项目路径后为：<a href="https://lanxuewei.gitee.io/static_blog/css/style.css" target="_blank" rel="noopener">https://lanxuewei.gitee.io/static_blog/css/style.css</a>。访问正常，ok，说明起始路径有问题，找到项目根目录的 _config.yml 配置文件，其中：</p>
+<blockquote>
+<p> url: <a href="http://yoursite.com">http://yoursite.com</a></p>
+<p>root: /static_blog</p>
+</blockquote>
+<p> 将 root 修改为你项目名称，重新部署就可以了。</p>
+<p><strong>问题2：使用 gittalk 作为评论系统，怎么配置，之前配置一直出现出初始化错误，或者加载错误之类的，总之就是配置项没弄好。</strong></p>
+<p>  首先在 gitub 上申请账号，地址： <a href="https://github.com/settings/developers" target="_blank" rel="noopener">https://github.com/settings/developers</a> </p>
+<p><img src="https://s2.ax1x.com/2019/06/05/VNOj1I.png" alt></p>
+<p>  申请过程中需要填写以下几项：</p>
+<blockquote>
+<p>Application name（这里我填写的项目名称，即 static_blog）</p>
+<p>Homepage URL（项目访问路径，例如：<a href="http://lanxuewei.gitee.io/static_blog/）" target="_blank" rel="noopener">http://lanxuewei.gitee.io/static_blog/）</a></p>
+<p>Authorization callback URL（我也是填上面项目访问路径）</p>
+</blockquote>
+<p>  然后填写 gittalk 配置项</p>
+<blockquote>
+<p>gitalk: </p>
+<p># gitub用户名</p>
+<p>owner: lanxuewei</p>
+<p># 存放评论的项目名，可以使用你的项目（gitub上的），也可以在gitub上新建一个</p>
+<p>repo: blog_comment</p>
+<p># 在上面申请完成后会有 client_id 和 client_secret，用于认证</p>
+<p>client_id: cb2v50e33bb2ds26bxxx</p>
+<p>client_secret: 8e3e3a79247b2c809c7152308xxxxxxxxxxxxxx</p>
+</blockquote>
+<p>  其中 owner 以及 repo 我之前一直弄错，所以导致一直没办法加载成功，最后加载成功以后，需要使用自己的账号登录初始化。</p>
+<p><strong>问题3：一切都完成以后，使用了一个新主题，不知道怎么定义标签以及将标签和文章进行关联。</strong></p>
+<p>  这个问题当时很头疼，但其实是自己不认真，在之前那篇搭建博客文章中说的很清楚，在写博客过程中，需要在博客头加上：</p>
+<blockquote>
+<p>title: #文章标题</p>
+<p>date: #文章日期</p>
+<p>tags: #文章标签</p>
+<p>categories: #文章分类</p>
+<p>-–</p>
+</blockquote>
+<p>  这里填写之后，自动会生成标签以及分类，我擦，这么简单，当时搞死老子了。</p>
+<p>  还可以添加摘要，只要在博客头加上：</p>
+<p>摘要：一帆风顺的自己，还是要多摔几跤才会好好走路，不然总以为上天总在眷顾。</p>
+<!-- more -->
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-06-05T07:11:03.867Z" itemprop="dateUpdated">2019-06-05 15:11:03</time>
+</span><br>
+
+
+        
+        本人男，爱好女。除此之外，诸多爱好。虽文不能治国，武不能安邦，但确实是好人一枚。喜欢文学，唐诗宋词略懂皮毛。笔耕不辍，记些鸡毛蒜皮，市井小事。
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/static_blog/img/avatar.jpg" alt="lanxuewei">
+            lanxuewei
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/博客/">博客</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&title=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&title=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&source=  本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/static_blog/2019/05/29/人生如逆旅-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">人生如逆旅</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+        var id = location.pathname
+        if (location.pathname.length > 50) {
+          id = location.pathname.replace(/\/\d+\/\d+\/\d+\//, '').replace('/', '').substring(0, 50)
+        }
+        const gitalk = new Gitalk({
+          clientID: 'cb6c56e31bb2de26b170',
+          clientSecret: '8e3e3a79247b2c809c7152308c2c521df7890220',
+          repo: 'blog_comment',
+          owner: 'lanxuewei',
+          admin: ['lanxuewei'],
+          id: id,      // Ensure uniqueness and length less than 50
+          title: document.title.split('|')[0],
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+
+        gitalk.render('gitalk-container')
+    </script>
+</section>
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>lanxuewei &copy; 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&title=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&title=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&source=  本文主要介绍如何搭建一个简单静态的个人博客网站，也不知道从什么时候开始非常喜欢写点东西，不管是一开始的各种乱七八糟心情，还是后面的乱七八糟技术点，感觉..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《关于 Hexo+Gitub 搭建静态博客相关问题》 — 空谷小屋&url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/03/关于 Hexo+Gitub 搭建静态博客相关问题-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuElEQVR42u3a0W7qMBAE0P7/T/e+XqkKmdl1KJVOnlCAxCdIXjPrr6/4+P7veH3+6jOvzyTnr949cODh4eEthv7z+Hnjq3dnx9UVru6bjxkPDw/vad7raTqZml/fJsEkpLq04OHh4X0AL/98PrnnJQcPDw/vb/HacGETcOTjwcPDw/stXhsWtMjV5P6erAUPDw8v5uWT+Oe8fqS/h4eHh7fuqufT7ustBae+VY8TDw8P7wHePnI9VWA2S+ebseHh4eE9wGtj1tkn80l/s5guHjoeHh7eiNe2uNqNrfkWgbacFFM/Hh4e3lFe3qbax695SchrWrslCw8PD2/Pm02ymz5bsuw+thEBDw8P7wHevn01Wy7n5ScvNnh4eHjv521ihU0BmI2hKFR4eHh4R3mbyyXFIIkhNk2ym2/h4eHhPcx7ffs6Dy7bV/vNXjdZCx4eHt4h3r4A5JFBWxJmke4wccHDw8OLeZE7no7zaHWzEaH+xfDw8PCO8hJw2wBrl8X5onyzZRYPDw/vFC8Z+r7R1QLyR3ATl+Dh4eE9zJsFrHkZSM5vYo6bwoCHh4d3iDdrU+UhbH6dNghuCw8eHh7eKV77J38TpM7aaXlEEjXA8PDw8Na8TUk41ZQ6u73g8jfEw8PDO8RrQ9hZ06t93knXLlp24+Hh4T3Ai9pIh7ZDza6QBMrDlAUPDw9vxGujgc1CeRYltIFI8V8BDw8Pb8TbT+Wz8DeZyfMDDw8P75287/KYTeX7zQTDmBgPDw/vqQ7UavLNi0r++Now4gAbDw8Pr+SdbVZtQt72MRWbrvDw8PAe4CX9ozbePctrI2M8PDy8T+C1jag2dJgttaMwFw8PD++XeHkTK19Ytw+0ZePh4eE9x5uFEclit112t4/+5l54eHh4D/BmA00Wx/nWgbyEHO7s4eHh4XW8f//hc6h0xjEGAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/static_blog/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
