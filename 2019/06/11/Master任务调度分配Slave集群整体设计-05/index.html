@@ -14,25 +14,27 @@
     
     
     
-    <title>Master任务调度分配Slave集群整体架构设计与实现相关问题 | 空谷小屋 | 空山新雨后，天气晚来秋</title>
+    <title>Master任务调度分配Slave集群整体设计 | 空谷小屋 | 空山新雨后，天气晚来秋</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="技术,规划">
-    <meta name="description" content="本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死大boss。">
-<meta name="keywords" content="技术,规划">
+    <meta name="keywords" content="Java,分布式,集群">
+    <meta name="description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
+<meta name="keywords" content="Java,分布式,集群">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Master任务调度分配Slave集群整体架构设计与实现相关问题">
-<meta property="og:url" content="http://yoursite.com/2019/06/11/有待提高-04 - 副本/index.html">
+<meta property="og:title" content="Master任务调度分配Slave集群整体设计">
+<meta property="og:url" content="http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/index.html">
 <meta property="og:site_name" content="空谷小屋">
-<meta property="og:description" content="本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死大boss。">
+<meta property="og:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-11T03:12:55.055Z">
+<meta property="og:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
+<meta property="og:updated_time" content="2019-06-11T05:57:31.507Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Master任务调度分配Slave集群整体架构设计与实现相关问题">
-<meta name="twitter:description" content="本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死大boss。">
+<meta name="twitter:title" content="Master任务调度分配Slave集群整体设计">
+<meta name="twitter:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
+<meta name="twitter:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
     
     <link rel="shortcut icon" href="/static_blog/favicon.ico">
     <link rel="stylesheet" href="/static_blog/css/style.css?v=1.7.2">
@@ -125,7 +127,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Master任务调度分配Slave集群整体架构设计与实现相关问题</div>
+        <div class="flex-col header-title ellipsis">Master任务调度分配Slave集群整体设计</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -147,7 +149,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">Master任务调度分配Slave集群整体架构设计与实现相关问题</h1>
+        <h1 class="title">Master任务调度分配Slave集群整体设计</h1>
         <h5 class="subtitle">
             
                 <time datetime="2019-06-11T03:01:16.414Z" itemprop="datePublished" class="page-time">
@@ -155,7 +157,7 @@
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/生活/">生活</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/技术/">技术</a></li></ul>
 
             
         </h5>
@@ -170,15 +172,15 @@
 <div class="container body-wrap">
     
 
-<article id="post-有待提高-04 - 副本" class="post-article article-type-post fade" itemprop="blogPost">
+<article id="post-Master任务调度分配Slave集群整体设计-05" class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">Master任务调度分配Slave集群整体架构设计与实现相关问题</h1>
+        <h1 class="post-card-title">Master任务调度分配Slave集群整体设计</h1>
         <div class="post-meta">
             <time class="post-time" title="2019-06-11 11:01:16" datetime="2019-06-11T03:01:16.414Z" itemprop="datePublished">2019-06-11</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/生活/">生活</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/static_blog/categories/技术/">技术</a></li></ul>
 
 
 
@@ -190,8 +192,14 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死大boss。</p>
-<a id="more"></a>
+            <p>这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://psm763q72.bkt.clouddn.com/blog-05-01.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
 
         </div>
 
@@ -200,7 +208,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2019-06-11T03:12:55.055Z" itemprop="dateUpdated">2019-06-11 11:12:55</time>
+    最后更新时间：<time datetime="2019-06-11T05:57:31.507Z" itemprop="dateUpdated">2019-06-11 13:57:31</time>
 </span><br>
 
 
@@ -222,7 +230,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/技术/">技术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/规划/">规划</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/分布式/">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/static_blog/tags/集群/">集群</a></li></ul>
 
 
             
@@ -232,7 +240,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&title=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -242,22 +250,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&title=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&source=本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死..." data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/有待提高-04 - 副本/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&via=http://yoursite.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -380,7 +388,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&title=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -390,22 +398,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&title=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&source=本文主要记录一些作者想做或者要做的事，其中包括技术，也包括生活等。生活总要满怀期待和目标，才能尽自己所能向着未来冲去，一步步收齐经验值总会升级最后一刀砍死..." data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/有待提高-04 - 副本/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体架构设计与实现相关问题》 — 空谷小屋&url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&via=http://yoursite.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/有待提高-04 - 副本/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -416,7 +424,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACL0lEQVR42u3awW6DQAxF0fz/T1Opq0opcJ8NafHcWUVpQuaweB3bvF54bd/r/fXPd97X3mfS7162ZMiQ8VjGdrj2tk6us3cj0t9FVBkyZCzA6ITscaTy2CW/u/u+DBkyZICjWz+4+edlyJAhoxZ8nRj9s/8bMmTIeBSjU0wGpWZ4uLylFpchQ8YDGZ3BwN2vPzTfkCFDxj9mdAL0+PUdwb17ZRkyZIxm8IY+KSNJs4wPEuIxqgwZMoYy0nBMH7Ag7LTB98tfZciQMZqRBi4/AtbAnTiWIUPGVEatBU8OhXwrnYcwZMiQsQ6Dl6M8ZPsDgONdyZAhYx0Gf2CLDAY6IwR+C2TIkLEm46SNhcvRlMFL6PhbMmTIGM2oRWStJcdbdcWBqwwZMgYxTppZOHb7489O3MuQIWMdRi0u02PctcdKGTJkzGakm+NNt87AMh6CypAhYzSDNNrSxy/SCOYkGTJkrMyojRLJptPg5jtBtbgMGTIGMYrtLXxk5LF+XOIWpxwyZMgYweCHOd6GS0vTtNkXPJEhQ4aMcYwNr6vGA50G3G7gypAhYxyDt+B5EKfX7MS0DBkyZjO2cKUhmMZu7WoyZMiYzejMPDsNtbRg7hwlZciQMYPBi9W0WcZbaRcErgwZMhZgkE57ui1+oEwbbTJkyJCRHtFqo8e0lD1hy5AhQ0ZjhMmPm3ycIEOGjDUZtYcq+O3ojz9R4MqQIWMoIx0MdIKY3LgbSTJkyHge4wu5BmC+Mkhw9gAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3a0U7DMAwF0P3/Tw+JJyRoubbjMaSTp6l0aU+QEs/24xGP5+e4unL1+X6e55fx/Z6r8dgYeHh4eK1Xv5/u/jH31/MlqM4QLQEeHh7eGi/ZxJOtP3nR+8XND5XkuXh4eHh/y8tD296dSXiNh4eH9x95edKhGqzPDyc8PDy8V/KSl8gD6GpY3OMdzrXg4eHhLVSR3ufzYn0PDw8Pb1BVrx4Yp0po+Qy/fAsPDw9vgVdN1+bpiSTMTb57nxqOQn88PDy8o7w8FZsXpfI0QdJMUH1uIUeCh4eHN+D1At+kuWpe6Kq2I/xwMODh4eGt8fLte5IyqDZUjcJxPDw8vDVe3hCQHwlVRr5w+Rvi4eHhbfDyl+6lZedHTq+hAQ8PD2+b19v6q4HypIWrihn9J/Hw8PBuedVi/CSB2zsMRvPg4eHhLfDmgWwyeqH25DoeHh7eNi9/ofye5K/V0levKQEPDw/vLC8vNeVlrSTkTZ7eW77oxMPDw8Mb8PJDImmlyqnV+3spCTw8PLwNXnVr7h0VeQB99qjAw8PD2+D1Gq3yrb+a5pgv6GVKAg8PD+8QrwpIHl9N0VZLboXiGR4eHt4Cr5dOTbbpPPNRfd1jnRF4eHh4LV4UcY9bqXrNAQdKX3h4eHjLvOpGXE1n5CWxavtXFEzj4eHhHeIlm371YZNmqWrColeow8PDw5vwkmD67PXqE1eyLHh4eHhn6lbNTTxvtDpbZisH03h4eHiHeM/iyI+BatdTHo4Xgm88PDy8BV4+JgdGPlseUuffwsPDw9vgVUPkSRls75hpBtZ4eHh4A16v3NVLv26MXw4GPDw8vLfhTRqh8sWqpnrx8PDw3oeXJyaStMWLlhIPDw9vjTdJRlQ362qSdzQzHh4e3u7M0U/9ailr43pyBQ8PD2+B9wGk8lS5JPD57AAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
