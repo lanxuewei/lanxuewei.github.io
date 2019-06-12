@@ -21,19 +21,19 @@
     
     
     <meta name="keywords" content="Java,分布式,集群">
-    <meta name="description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
+    <meta name="description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。 系统整体之间调用如下图：">
 <meta name="keywords" content="Java,分布式,集群">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Master任务调度分配Slave集群整体设计">
-<meta property="og:url" content="http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/index.html">
 <meta property="og:site_name" content="空谷小屋">
-<meta property="og:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
+<meta property="og:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。 系统整体之间调用如下图：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
-<meta property="og:updated_time" content="2019-06-11T05:57:31.507Z">
+<meta property="og:updated_time" content="2019-06-11T08:54:39.291Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Master任务调度分配Slave集群整体设计">
-<meta name="twitter:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。">
+<meta name="twitter:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。 系统整体之间调用如下图：">
 <meta name="twitter:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
     
     <link rel="shortcut icon" href="/static_blog/favicon.ico">
@@ -172,11 +172,15 @@
 <div class="container body-wrap">
     
 
-<article id="post-Master任务调度分配Slave集群整体设计-05 - 副本" class="post-article article-type-post fade" itemprop="blogPost">
+<article id="post-Master任务调度分配Slave集群整体设计-05" class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
         <h1 class="post-card-title">Master任务调度分配Slave集群整体设计</h1>
         <div class="post-meta">
+
+            <!-- 置顶 -->
+            
+
             <time class="post-time" title="2019-06-11 14:45:46" datetime="2019-06-11T06:45:46.357Z" itemprop="datePublished">2019-06-11</time>
 
             
@@ -192,7 +196,8 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，其中 Master 为任务调度分配中心，Slave 为各个任务计算节点，通过将 Master 分配来的任务进行计算，最后将结果返回。</p>
+            <p>这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。</p>
+<p>系统整体之间调用如下图：</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
@@ -200,6 +205,15 @@
                 </div>
                 <div class="image-caption"></div>
             </figure>
+<h4 id="功能模块概要"><a href="#功能模块概要" class="headerlink" title="功能模块概要"></a>功能模块概要</h4><p><strong>任务流入</strong>：其中任务源为产生任务的地方，每一个任务产生时便会将任务推送给 Master，其中推送的任务包含未计算与不可计算任务，未计算表示任务可计算但是未计算，所以该任务会经过 Master 分配给 Slave 进行计算；不可计算任务表示任务缺少关键内容，不可计算，无需分配给 Slave 计算。</p>
+<p><strong>任务分配：</strong>Master 为任务分配调度中心，一台机器搭配 Mysql ，数据库主要记录信息为：</p>
+<ul>
+<li>任务基本信息（业务主键、类型、状态、结果、失败原因、来源、分配机器计算节点Slave Ip 、<del>计算尝试次数</del>、任务分配尝试次数、创建以及分配完成各项时间等）</li>
+<li>计算节点 Slave 基本信息（业务主键、计算节点 Ip 、上次以及下次心跳时间、Gpu 个数 [因为计算节点使用 ai 进行图片分析，所以 Gpu 个数作为任务分配时负载均衡的一个权衡因子]、运行任务个数、等待任务个数、繁忙程度、可处理任务类型）</li>
+<li>消息队列信息（业务主键、消息主题、推送内容、附加信息、推送状态）</li>
+</ul>
+<p><strong>任务计算以及结果返回：</strong>当任务分配过来计算完成以后会将结果同步回 Master 。</p>
+<h4 id="任务流转过程"><a href="#任务流转过程" class="headerlink" title="任务流转过程"></a>任务流转过程</h4><p>—— 待更</p>
 
         </div>
 
@@ -208,7 +222,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2019-06-11T05:57:31.507Z" itemprop="dateUpdated">2019-06-11 13:57:31</time>
+    最后更新时间：<time datetime="2019-06-11T08:54:39.291Z" itemprop="dateUpdated">2019-06-11 16:54:39</time>
 </span><br>
 
 
@@ -240,7 +254,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -250,22 +264,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&via=http://yoursite.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -388,7 +402,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -398,22 +412,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&title=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Master任务调度分配Slave集群整体设计》 — 空谷小屋&url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/&via=http://yoursite.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05 - 副本/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/06/11/Master任务调度分配Slave集群整体设计-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -424,7 +438,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADMElEQVR42u3awW7qQAwFUP7/p1Pp7Z7ahGs7SGDOrFALIWeyML6exyNex79V/XvyqbPX199y/FqPVyxsbGzsD2Eflyu50etPJVtzBqtubmLBxsbG3spOykz1Fq+3ILnp3kZHhRYbGxv7K9n5r/oe47rxyAsYNjY2Nnb15q4LWx4A5a0LNjY2NnYvVKoG8dVrzocQL8nSsLGxsd+eXR30vvPrF863sbGxsd+SfRRXHiRV46ekpZnc+X9XxsbGxl7E7sXxPcB8O+6NmbCxsbF3sPPIPh8J5MjecZzeQ8LGxsbeyq6WsUnEk7cuSayfDwaePCRsbGzsFey8FE1uOt+m3jvLh4SwsbGx17F7E9K7BsPzgKkaP2FjY2NvYucFIL+h+RA3/9TknrGxsbF3sKs//fMiNAEnn60+BmxsbOx97N6xm94AIDkQORrZBpuCjY2NvY+d/KyvhkG9MnPvVkYNEjY2NvYKdrXZyGF56NMbNvdKIzY2NvZudjI9yMe3PeQRr+pY4rSAYWNjY69gX0c2vYbkrpFAb2D85FuwsbGxF7HzkpMPcXtlqRcn9QbM2NjY2JvYyZuO1rrrOGb+MPISiI2Njb2VnePzWD8/cNMrokmw9cedYGNjYy9izw9H5u1Eb5CQF7ZyEcXGxsZewc7joWqI3wukeqFSNa7CxsbG3sqel41HcSVj47yByVsjbGxs7K3s/KBMfhynFyFN2qFoI7CxsbG/gN370d8bGzeHtcXoqhwqYWNjY38IO39TcrAm+W+17CX45hWwsbGxV7AnhaHXYPTGAPPW5fQ5Y2NjY384uxct9QpYtcnJtz4/6IONjY29jz2J5ptlo7h914CkKP7xfmxsbOx17Pyi+V/yEtXDTw4bYWNjY+9j5ytvLaqYXtjU3GhsbGzsRezqTeSFJB/QVtuevLG5AY+NjY39Iey8aOXB0CtGApNvfDIkwMbGxl7BLoQyccTfK0694UF5nICNjY39ley7jvtMRrzVHuv0s9jY2NhfzK6WousmJyk8vcbpyXdhY2Njr2NXLzQ/vjMZGydHeZ5EY9jY2NiL2L2AJr/0PJC6t7BhY2NjL2L/ACYlZBdVcdMkAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3a0U7DMAwF0P3/Tw+JJyRoubbjMaSTp6l0aU+QEs/24xGP5+e4unL1+X6e55fx/Z6r8dgYeHh4eK1Xv5/u/jH31/MlqM4QLQEeHh7eGi/ZxJOtP3nR+8XND5XkuXh4eHh/y8tD296dSXiNh4eH9x95edKhGqzPDyc8PDy8V/KSl8gD6GpY3OMdzrXg4eHhLVSR3ufzYn0PDw8Pb1BVrx4Yp0po+Qy/fAsPDw9vgVdN1+bpiSTMTb57nxqOQn88PDy8o7w8FZsXpfI0QdJMUH1uIUeCh4eHN+D1At+kuWpe6Kq2I/xwMODh4eGt8fLte5IyqDZUjcJxPDw8vDVe3hCQHwlVRr5w+Rvi4eHhbfDyl+6lZedHTq+hAQ8PD2+b19v6q4HypIWrihn9J/Hw8PBuedVi/CSB2zsMRvPg4eHhLfDmgWwyeqH25DoeHh7eNi9/ofye5K/V0levKQEPDw/vLC8vNeVlrSTkTZ7eW77oxMPDw8Mb8PJDImmlyqnV+3spCTw8PLwNXnVr7h0VeQB99qjAw8PD2+D1Gq3yrb+a5pgv6GVKAg8PD+8QrwpIHl9N0VZLboXiGR4eHt4Cr5dOTbbpPPNRfd1jnRF4eHh4LV4UcY9bqXrNAQdKX3h4eHjLvOpGXE1n5CWxavtXFEzj4eHhHeIlm371YZNmqWrColeow8PDw5vwkmD67PXqE1eyLHh4eHhn6lbNTTxvtDpbZisH03h4eHiHeM/iyI+BatdTHo4Xgm88PDy8BV4+JgdGPlseUuffwsPDw9vgVUPkSRls75hpBtZ4eHh4A16v3NVLv26MXw4GPDw8vLfhTRqh8sWqpnrx8PDw3oeXJyaStMWLlhIPDw9vjTdJRlQ362qSdzQzHh4e3u7M0U/9ailr43pyBQ8PD2+B9wGk8lS5JPD57AAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
