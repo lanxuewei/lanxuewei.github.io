@@ -29,12 +29,12 @@
 <meta property="og:site_name" content="空谷小屋">
 <meta property="og:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。 系统整体之间调用如下图：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
-<meta property="og:updated_time" content="2019-06-11T08:54:39.291Z">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-01.png">
+<meta property="og:updated_time" content="2019-07-26T08:38:26.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Master任务调度分配Slave集群整体设计">
 <meta name="twitter:description" content="这里首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，任务源为多个，对 Master 进行任务推送。其中 Master 为任务计算调度分配中心（一台机器），Slave 为各个任务计算节点（多台机器），Slave 将 Master 分配来的任务进行计算，最后将结果返回。 系统整体之间调用如下图：">
-<meta name="twitter:image" content="http://psm763q72.bkt.clouddn.com/blog-05-01.png">
+<meta name="twitter:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-01.png">
     
     <link rel="shortcut icon" href="/static_blog/favicon.ico">
     <link rel="stylesheet" href="/static_blog/css/style.css?v=1.7.2">
@@ -201,17 +201,15 @@
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://psm763q72.bkt.clouddn.com/blog-05-01.png" alt title>
+                    <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-01.png" alt title>
                 </div>
                 <div class="image-caption"></div>
             </figure>
 <h4 id="功能模块概要"><a href="#功能模块概要" class="headerlink" title="功能模块概要"></a>功能模块概要</h4><p><strong>任务流入</strong>：其中任务源为产生任务的地方，每一个任务产生时便会将任务推送给 Master，其中推送的任务包含未计算与不可计算任务，未计算表示任务可计算但是未计算，所以该任务会经过 Master 分配给 Slave 进行计算；不可计算任务表示任务缺少关键内容，不可计算，无需分配给 Slave 计算。</p>
 <p><strong>任务分配：</strong>Master 为任务分配调度中心，一台机器搭配 Mysql ，数据库主要记录信息为：</p>
-<ul>
-<li>任务基本信息（业务主键、类型、状态、结果、失败原因、来源、分配机器计算节点Slave Ip 、<del>计算尝试次数</del>、任务分配尝试次数、创建以及分配完成各项时间等）</li>
-<li>计算节点 Slave 基本信息（业务主键、计算节点 Ip 、上次以及下次心跳时间、Gpu 个数 [因为计算节点使用 ai 进行图片分析，所以 Gpu 个数作为任务分配时负载均衡的一个权衡因子]、运行任务个数、等待任务个数、繁忙程度、可处理任务类型）</li>
-<li>消息队列信息（业务主键、消息主题、推送内容、附加信息、推送状态）</li>
-</ul>
+<p>1、任务基本信息（业务主键、类型、状态、结果、失败原因、来源、分配机器计算节点Slave Ip 、<del>计算尝试次数</del>、任务分配尝试次数、创建以及分配完成各项时间等）</p>
+<p>2、计算节点 Slave 基本信息（业务主键、计算节点 Ip 、上次以及下次心跳时间、Gpu 个数 [因为计算节点使用 ai 进行图片分析，所以 Gpu 个数作为任务分配时负载均衡的一个权衡因子]、运行任务个数、等待任务个数、繁忙程度、可处理任务类型）</p>
+<p>3、消息队列信息（业务主键、消息主题、推送内容、附加信息、推送状态）</p>
 <p><strong>任务计算以及结果返回：</strong>当任务分配过来计算完成以后会将结果同步回 Master 。</p>
 <h4 id="任务流转过程"><a href="#任务流转过程" class="headerlink" title="任务流转过程"></a>任务流转过程</h4><p>—— 待更</p>
 
@@ -222,7 +220,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2019-06-11T08:54:39.291Z" itemprop="dateUpdated">2019-06-11 16:54:39</time>
+    最后更新时间：<time datetime="2019-07-26T08:38:26.378Z" itemprop="dateUpdated">2019-07-26 16:38:26</time>
 </span><br>
 
 
