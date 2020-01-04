@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>No title | 空谷小屋 | 空山新雨后，天气晚来秋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content>
+    <meta name="description" content="一、背景以及需求说明  后台管理端的每次关键操作都需要有日志可追溯，可查询操作情况，即记录操作人在何时进行了某项操作，成功或者失败情况等，类似如下：  蓝小伟删除神奇宝贝机构下王小伟用户    其中主体内容可以分为几个部分，采用表格形式进行展示，具体详情如下：  操作人  操作人角色  操作人手机号  操作类型【新增、修改、删除等】  操作对象【用户、角色、机构等】  操作时间   二、设计（一）">
+<meta name="keywords" content="lanxuewei 空山小屋 蓝学伟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="No title">
+<meta property="og:url" content="http://yoursite.com/2020/01/04/13-操作日志-设计/index.html">
+<meta property="og:site_name" content="空谷小屋">
+<meta property="og:description" content="一、背景以及需求说明  后台管理端的每次关键操作都需要有日志可追溯，可查询操作情况，即记录操作人在何时进行了某项操作，成功或者失败情况等，类似如下：  蓝小伟删除神奇宝贝机构下王小伟用户    其中主体内容可以分为几个部分，采用表格形式进行展示，具体详情如下：  操作人  操作人角色  操作人手机号  操作类型【新增、修改、删除等】  操作对象【用户、角色、机构等】  操作时间   二、设计（一）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/company/operation_log/operation_log-1.jpg">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/company/operation_log/operation_log-2.jpg">
+<meta property="og:updated_time" content="2020-01-04T09:20:44.603Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="No title">
+<meta name="twitter:description" content="一、背景以及需求说明  后台管理端的每次关键操作都需要有日志可追溯，可查询操作情况，即记录操作人在何时进行了某项操作，成功或者失败情况等，类似如下：  蓝小伟删除神奇宝贝机构下王小伟用户    其中主体内容可以分为几个部分，采用表格形式进行展示，具体详情如下：  操作人  操作人角色  操作人手机号  操作类型【新增、修改、删除等】  操作对象【用户、角色、机构等】  操作时间   二、设计（一）">
+<meta name="twitter:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/company/operation_log/operation_log-1.jpg">
+    
+    <link rel="shortcut icon" href="/static_blog/favicon.ico">
+    <link rel="stylesheet" href="/static_blog/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/static_blog/img/brand.jpg)">
+      <div class="brand">
+        <a href="/static_blog/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/static_blog/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">lanxuewei</h5>
+          <a href="mailto:lanxueweilove@qq.com" title="lanxueweilove@qq.com" class="mail">lanxueweilove@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/lanxuewei" target="_blank">
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://weibo.com/lanxueweilove" target="_blank">
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/static_blog/test">
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis"></div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title"></h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-01-04T06:03:28.439Z" itemprop="datePublished" class="page-time">
+  2020-01-04
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-13-操作日志-设计" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title"></h1>
+        <div class="post-meta">
+
+            <!-- 置顶 -->
+            
+
+            <time class="post-time" title="2020-01-04 14:03:28" datetime="2020-01-04T06:03:28.439Z" itemprop="datePublished">2020-01-04</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style="display:none">
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="一、背景以及需求说明"><a href="#一、背景以及需求说明" class="headerlink" title="一、背景以及需求说明"></a>一、背景以及需求说明</h4><p>  后台管理端的每次关键操作都需要有日志可追溯，可查询操作情况，即记录操作人在何时进行了某项操作，成功或者失败情况等，类似如下：</p>
+<blockquote>
+<p>蓝小伟删除神奇宝贝机构下王小伟用户</p>
+</blockquote>
+<p>  其中主体内容可以分为几个部分，采用表格形式进行展示，具体详情如下：</p>
+<ul>
+<li><p>操作人</p>
+</li>
+<li><p>操作人角色</p>
+</li>
+<li><p>操作人手机号</p>
+</li>
+<li><p>操作类型【新增、修改、删除等】</p>
+</li>
+<li><p>操作对象【用户、角色、机构等】</p>
+</li>
+<li><p>操作时间</p>
+</li>
+</ul>
+<h4 id="二、设计"><a href="#二、设计" class="headerlink" title="二、设计"></a>二、设计</h4><h5 id="（一）、方案设计"><a href="#（一）、方案设计" class="headerlink" title="（一）、方案设计"></a>（一）、方案设计</h5><h6 id="方案一："><a href="#方案一：" class="headerlink" title="方案一："></a><strong>方案一：</strong></h6><p>  采用全局拦截器，通过拦截请求，获取请求接口地址，匹配对应url-接口描述得到操作详情，但是这种方式需要配置url-接口描述字典且没办法获取操作对象详情等。</p>
+<ul>
+<li>优点：统一处理，较为方便，如事先配置好接口地址对应的详情即可，如 <code>/zoo/add</code> 对应【新增动物园】；</li>
+<li>缺点：缺乏灵活性，且获取接口中详细信息较为困难。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<p>  1、无法解析获取参数详情；</p>
+<p>  2、需配置对应的接口-详情字典表，且当接口修改更新后需要及时同步，否则会出现记录日志与实际操作有所出入； </p>
+<h6 id="方案二："><a href="#方案二：" class="headerlink" title="方案二："></a><strong>方案二：</strong></h6><p>  设计注解和切面采集日志，切面采用环绕切面，首先在函数执行前收集参数信息，其次执行函数获取返回值或异常信息，最后整合操作日志信息写入数据库中。</p>
+<ul>
+<li>优点：较为灵活，需要的接口直接添加即可，不需要配置字典，可以获取业务中部分细节内容。</li>
+<li>缺点：需要添加接口较多时比较繁琐。</li>
+</ul>
+<p><strong>注意点：</strong></p>
+<ol>
+<li>分析参数时需考虑参数对象以及Json对象，过滤掉 <code>HttpServletRequest</code> 以及 <code>HttpServletResponse</code> 等相关参数，需要的参数对象采用反射方式获取参数值，Json对象通过直接获取。</li>
+<li>操作日记采集应尽量不影响原接口返回时间以及结果等。</li>
+<li>当方法调用异常时需要记录异常信息等。</li>
+</ol>
+<blockquote>
+<p>通过比较，因为此需求对于操作详情要求较高，方案一比较达不到要求，方案二可以实现，并且更加灵活，所以采用方案二实现；后续将对此进行更加详细设计；</p>
+</blockquote>
+<h6 id="（二）、流程设计"><a href="#（二）、流程设计" class="headerlink" title="（二）、流程设计"></a>（二）、流程设计</h6><p>  注解以及切面设计流程图如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/company/operation_log/operation_log-1.jpg" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<blockquote>
+<p>采用加注解方式，注解拥有以下参数：</p>
+</blockquote>
+<p>  1、接口描述【新增用户、新增角色等】-必选；</p>
+<p>  2、操作对象类型【用户、机构、角色等】-必选；</p>
+<p>  3、操作者手机号【一般通过Token获取操作者身份，但是登陆时无缓存，直接通过手机号查找操作人详情】-可选，默认为空；</p>
+<p>  4、操作对象Id参数名【通过对象Id参数名获取具体参数值】-可选，默认为空；</p>
+<p>  5、操作对象名【新增时数据库并无操作对象信息，直接通过该字段获取】-可选，默认为空；</p>
+<p>  6、操作对象所属机构【操作用户、角色等时需记录被操作对象的所属机构】-可选，默认为空；</p>
+<p>  7、异步记录【默认采用异步方式，可修改为同步方式，如修改、删除等操作，需要提前记录则采用同步方式，否则异步记录，数据已被更改，操作日志不准确】-可选，默认为空，；</p>
+<h5 id="（二）、代码设计"><a href="#（二）、代码设计" class="headerlink" title="（二）、代码设计"></a>（二）、代码设计</h5><p>  部分代码设计如下：</p>
+<ul>
+<li><code>OperationLog</code> ：操作日志注解【在函数头中添加，进行切面拦截以及参数名获取等】</li>
+<li><code>OperationLogAspect</code>： 操作日志切面【切面拦截执行函数，获取函数入参、执行情况等】</li>
+<li><code>OperationLogService</code>： 日志相关业务接口【用于分析参数保存日志等操作】</li>
+<li><code>HandlerFactory</code>： 操作对象处理器工厂【用户根据操作对象类型获取对应的操作对象处理器】</li>
+<li><code>UserHandler</code> 、 <code>OrgHandler</code>、 <code>RoleHandler</code> ：具体操作对象处理器【比如用户处理器，即通过Id查询用户表，获取用户详细信息等，可扩展】  </li>
+</ul>
+<p><img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/company/operation_log/operation_log-2.jpg" alt></p>
+<h4 id="三、实现"><a href="#三、实现" class="headerlink" title="三、实现"></a>三、实现</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-01-04T09:20:44.603Z" itemprop="dateUpdated">2020-01-04 17:20:44</time>
+</span><br>
+
+
+        
+        本人男，爱好女。除此之外，诸多爱好。虽文不能治国，武不能安邦，但确实是好人一枚。喜欢文学，唐诗宋词略懂皮毛。笔耕不辍，记些鸡毛蒜皮，市井小事。
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/static_blog/img/avatar.jpg" alt="lanxuewei">
+            lanxuewei
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/01/04/13-操作日志-设计/&title=空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/01/04/13-操作日志-设计/&title=空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/01/04/13-操作日志-设计/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=空谷小屋&url=http://yoursite.com/2020/01/04/13-操作日志-设计/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/01/04/13-操作日志-设计/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/static_blog/2019/08/29/10-书/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">书</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>lanxuewei &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/01/04/13-操作日志-设计/&title=《No title》 — 空谷小屋&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/01/04/13-操作日志-设计/&title=《No title》 — 空谷小屋&source=一步步记录自己走过的路罢了" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/01/04/13-操作日志-设计/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — 空谷小屋&url=http://yoursite.com/2020/01/04/13-操作日志-设计/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/01/04/13-操作日志-设计/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3aQW7cMAwF0Nz/0inQVYFmnP8pIe1Iz6tZODafFwxF8uMjvj5/X8nvP6+/n/B8/6u/3XZhYGC8LSN5XBLuSlgbnomBgXEBo02ys1Q7+2TPsWFgYGC8Cj1JxMn9SfmIgYGB0Sbc58IuefLskIyBgYGRlGvPD53dn79321kcAwPjDRl7BwN7f/+z+QYGBsZ/w/gcXW2xmCfQYTwYGBhHM5IyLj+4JtT15YwiIAwMjCMYK0kzCeX5Xe3Y4CUSAwPjGkbbjt/VXGuHpl9EiIGBcTRj9sr8WJuvVqyQMDAwzma0pVheDu5d4IhmsBgYGFcy9i5MJGk0T+LRIRYDA+MgRlI5Js2yFr+yZoGBgXEP42fCyocK+Qetx5kYGBhvy1hPfEmRN/sExWAVAwPjAsauUeLKgld7AI7+J2BgYBzEaIcBs7IyD64uGTEwMK5htIfYZFViuNQVF6MYGBg3MPKw1ocEs5Fn3U/DwMA4lNEuVeSAlj079GJgYNzJ2LZaGpd3+Wih6B1iYGAcymiXIZIl1L3tvG8WwjAwMA5lrPTY86Q5DKiMDQMD4zzGrB3WFn85rB18frEWhoGBcRxjw8hwoSXXJtb1J2NgYLwvox0rztr6K+08DAwMjNkYsm2TzRY7igEGBgYGRrmqlaTv2VG2rl4xMDAuY7SDxrZ99pzEvyFhYGBcwMhTZDs8mN1fDwMwMDCOZuxt1udJc/Yhto0wMTAw3oPxC52FS6np1e0JAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/static_blog/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/static_blog/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/static_blog/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
