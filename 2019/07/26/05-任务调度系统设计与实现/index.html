@@ -30,8 +30,10 @@
 <meta property="og:description" content="一、整体介绍  首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，Master为任务调度系统，主要负责对于任务进行分配、结果回收等操作；Slave为任务代理计算节点，主要负责任务的计算以及后续数据处理等。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-01.jpg">
-<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-02.png">
-<meta property="og:updated_time" content="2020-03-31T03:39:12.722Z">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-02.jpg">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-03.png">
+<meta property="og:image" content="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-04.png">
+<meta property="og:updated_time" content="2020-04-01T08:32:16.484Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="任务调度系统">
 <meta name="twitter:description" content="一、整体介绍  首先简单介绍一下本文介绍的两个系统： Master 和 Slave ，Master为任务调度系统，主要负责对于任务进行分配、结果回收等操作；Slave为任务代理计算节点，主要负责任务的计算以及后续数据处理等。">
@@ -218,13 +220,38 @@
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-02.png" alt title>
+                    <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-02.jpg" alt title>
                 </div>
                 <div class="image-caption"></div>
             </figure>
 <p>  其中Master和Slave都为集群部署，所以涉及到任务分配时并发问题，具体问题以及处理方式如下：</p>
-<p>  1、Master分配任务是定时任务，定时查询需要计算任务和空闲代理计算资源，进行负载均衡后对任务进行分配处理，但是如果多个机器同时分配，就可能导致单个任务被多个Master分配到多个Slave中去，导致重复计算，浪费资源。</p>
-<p>  <strong>处理方式：</strong>使用Leader选举方式进行</p>
+<p>  <strong>（1）Master分配任务过程如何实现负载均衡，如何分配任务更加合理，使得单个代理节点都资源最大化。</strong></p>
+<p>  <strong>说明：</strong>Master进行任务分配时会进行负载均衡，其中权重因子计算方式是等待和处理任务数除以Gpu个数，即单个Gpu任务数，因为处理影像的Ai主要消耗Gpu资源；除此之外，后期数据积累后也可以考虑通过病种的类型，统计分析每个病种大概所需处理时间作为计算因子之一。</p>
+<p>  <strong>（2）Master分配任务是定时任务，定时查询需要计算任务和空闲代理计算资源，进行负载均衡后对任务进行分配处理，但是如果多个机器同时分配，就可能导致单个任务被多个Master分配到多个Slave中去，导致重复计算，浪费资源。</strong></p>
+<p>  <strong>说明：</strong>Master中使用选举方式进行leader选举，挑选出leader执行定时任务，进行任务分配，非leader不执行该定时任务。</p>
+<p>  <strong>（3）Master分配任务至Slave时，每个Slave都有自己的数据库，但这样就导致任务回收时需要做废原任务，然后再分配给其他Slave，为何不直接所有Slave使用同一个数据库。</strong></p>
+<p>  <strong>说明：</strong>一部分是历史原因，云平台的前身是单机版，单机版可以认为是类似于Slave，但自身包含了存储启动任务以及处理任务等逻辑，为了保持兼容性，将Slave与单机版保持接近便于迁移以及后期兼容；另一部分是为了减少数据库负载，分摊数据库压力，当单个代理节点挂掉时影响较小，其他代理节点还可以正常工作；</p>
+<p>  超时回收：目前任务有超时机制，当一个任务超时之后会进行重分配，并通知原任务做废，当Slave更新Ai结果回Master时，Master会通过任务所属Slave的Ip进行更新控制，保证Ai结果是最新分配的Slave所更新的。</p>
+<p>  灾难扩散：因为任务超时原因可能是任务计算失败，且有可能数据会导致代理计算节点挂掉，所以为了防止任务回收以后分给其他机器又导致其他机器挂掉，采用了尝试次数进行控制，防止灾难扩散问题，即单个任务最多只能分配三次，三次失败以后，该条任务不再分配处理。</p>
+<h4 id="四、难点与问题"><a href="#四、难点与问题" class="headerlink" title="四、难点与问题"></a>四、难点与问题</h4><blockquote>
+<p> //  todo ： 待完成</p>
+</blockquote>
+<h4 id="五、改进"><a href="#五、改进" class="headerlink" title="五、改进"></a>五、改进</h4><p>  1、原Master交互方式，如下图：</p>
+<p>  <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-03.png" alt></p>
+<p>  优化方式：将Slave集群更新Ai结果以及发送心跳方式从Dobbo调用修改为Http接口调用，任务新增环境群组Id，假设目前环境为阿里云和华为云，且配置为：</p>
+<blockquote>
+<p>aliyun.envGroupId=”<a href="http://cloud.ideaFly.com/master&quot;" target="_blank" rel="noopener">http://cloud.ideaFly.com/master&quot;</a><br>Huaweiyun.envGroupId=”<a href="http://cloud.ideaFly.com/master&quot;" target="_blank" rel="noopener">http://cloud.ideaFly.com/master&quot;</a></p>
+</blockquote>
+<p>  当Master分配任务时，将自己的任务群组Id带上，Slave收到任务进行计算，计算完毕将结果返回时，通过匹配任务对应的Master地址，将结果反馈给Master，其中环境群组Id为每个环境对外的开放接口，通过域名以及标记进行对应的转发。</p>
+<p>  优化后，结构如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://lanxuewei-blog.oss-cn-beijing.aliyuncs.com/05-04.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>  优化后优势：当阿里云环境Slave集群不够用时，可以修改华为云Slave集群的注册环境群组Id地址，使其向阿里云环境注册自己，注册完毕以后就可以直接替阿里云分摊任务，度过任务高峰拥挤期。</p>
 
         </div>
 
@@ -233,7 +260,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-03-31T03:39:12.722Z" itemprop="dateUpdated">2020-03-31 11:39:12</time>
+    最后更新时间：<time datetime="2020-04-01T08:32:16.484Z" itemprop="dateUpdated">2020-04-01 16:32:16</time>
 </span><br>
 
 
