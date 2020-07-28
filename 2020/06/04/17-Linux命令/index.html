@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="空谷小屋">
 <meta property="og:description" content="记录常用Linux命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-06-04T05:53:52.537Z">
+<meta property="og:updated_time" content="2020-07-28T06:39:23.941Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令">
 <meta name="twitter:description" content="记录常用Linux命令">
@@ -196,22 +196,17 @@
         <div class="post-content" id="post-content" itemprop="postContent">
             <p>记录常用Linux命令</p>
 <a id="more"></a>
-<h4 id="一、文件"><a href="#一、文件" class="headerlink" title="一、文件"></a>一、文件</h4><p><code>touch 文件名</code>：创建文件</p>
-<p><code>cat/more/less/tail 文件名</code>：查看文件</p>
-<p><code>vim 文件名</code>：编辑文件</p>
-<p><code>rm -rf 文件名</code>：删除文件</p>
-<p><code>find 目录 参数</code>：寻找目录</p>
-<blockquote>
-<p>示例：</p>
-<p>列举当前目录以及子目录所有文件和文件夹：<code>find .</code></p>
-<p>  在 <code>/home</code> 目录下查找 .txt 结尾的文件：<code>find /home -name &quot;*.txt&quot;</code></p>
-<p>  同上（忽略大小写）：<code>find /home -iname &quot;*.txt&quot;</code></p>
-</blockquote>
-<p><code>cp -r 目录名 目标地址</code>：拷贝目录，<code>-r</code> 表示递归</p>
-<p><code>tar -zcvf 压缩后目标名 需要打包文件</code>：压缩文件</p>
-<p><code>tar -xvf 文件名 -c 解压目标地址</code>：解压文件</p>
-<p><code>grep 搜索字符串 搜索文件 --color</code>：搜索命令，–color 代表高亮显示</p>
-
+<h4 id="一、基本操作"><a href="#一、基本操作" class="headerlink" title="一、基本操作"></a>一、基本操作</h4><p>关于linux命令大全：<a href="http://www.cnblogs.com/yjd_hycf_space/p/7730690.html" target="_blank" rel="noopener">http://www.cnblogs.com/yjd_hycf_space/p/7730690.html</a></p>
+<p><strong>1、文件相关</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">（1）文件传输：</span><br><span class="line">文件上传：rz</span><br><span class="line">文件下载：sz [file] 例：sz test.txt</span><br><span class="line"></span><br><span class="line">（2）跨服务器文件上传：</span><br><span class="line">scp local_file remote_username@remote_ip:remote_folder (只指定目录，与原文件同名)</span><br><span class="line">scp local_file remote_username@remote_ip:remote_file (指定文件名)</span><br><span class="line"></span><br><span class="line">（3）跨服务器目录上传：</span><br><span class="line">scp -r local_folder remote_username@remote_ip:remote_folder (只指定目录，与原目录同名)</span><br><span class="line">scp -r local_folder remote_ip:remote_folder (指定目录名)</span><br><span class="line"></span><br><span class="line">（4）数据同步：</span><br><span class="line">rsync -av root@ip:/home/data/ .</span><br><span class="line"></span><br><span class="line">（5）文件编辑或移动：</span><br><span class="line">创建文件：touch [file] 例：touch text.txt</span><br><span class="line">文件重命名：mv a b (将a文件重命名为b)</span><br><span class="line">拷贝目录：cp -r [source_dir] [dest_dir] 例：cp -r /home /usr</span><br><span class="line">删除文件：rm -rf [file] 例：rm -rf text.txt</span><br><span class="line">编辑文件：vim [file] 例：vim text.txt</span><br><span class="line"></span><br><span class="line">（6）文件查找：</span><br><span class="line">动态查看日志：tail -900f [log_file] 例：tail -900f test.log</span><br><span class="line">滚动查看日志：cat more [log_file] 例：cat more test.log</span><br><span class="line">文本匹配关键字查找：cat [log_file] |grep [keyword] 例：cat test.log |grep &apos;error&apos;</span><br><span class="line">查找大于500M文件：find [dir] -size +500M 例：find . -size +500M</span><br><span class="line">根据文件名查找文件：find [source_dir] [params] 例：find /usr -name &quot;*.txt&quot;</span><br><span class="line">	说明：-name 表示文件名</span><br><span class="line">	     -iname 表示文件名忽略大小写</span><br><span class="line">文本匹配：grep [keyword] [file] --color 例：grep &apos;error&apos; run.log --red</span><br><span class="line"></span><br><span class="line">（7）文件解压缩</span><br><span class="line">解压文件：tar -xvf [file] -c [dest_file_path] 例：tar -xvf test.zip /usr</span><br><span class="line">压缩文件：tar -zcvf [dest_file_path] [source_file] 例：tar -zcvf test.zip /usr</span><br><span class="line"></span><br><span class="line">（8）文件存储情况：</span><br><span class="line">查看整体磁盘使用情况：df -h</span><br><span class="line">使用根目录下各个文件占用情况：du -ah --max-depth=1</span><br><span class="line">查看某个目录文件占用：du -bsh /home/lanxuewei</span><br><span class="line">查看当前目录总共占用：du -sh</span><br></pre></td></tr></table></figure>
+<p><strong>2、远程服务器登陆指令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">（1）服务器登陆</span><br><span class="line">ssh [-p22] username@ip </span><br><span class="line">例：ssh root@120.78.170.34</span><br><span class="line">例：shh -p22 root@120.78.170.34</span><br><span class="line"></span><br><span class="line">（2）数据库登陆</span><br><span class="line">mysql -uroot -p -h[remote_ip] 例：mysql -uroot -p -h192.16.10.3</span><br></pre></td></tr></table></figure>
+<p><strong>3、接口或端口访问</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">接口访问：curl -v http://localhost:8080/test/index</span><br><span class="line">端口访问：telnet 120.78.170.34 8080</span><br></pre></td></tr></table></figure>
+<p><strong>4、服务器配置</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">（1）查看防火墙状态</span><br><span class="line">service iptables status</span><br><span class="line">service ufw status</span><br></pre></td></tr></table></figure>
+<p><strong>5、python相关</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">后台运行python：nohup python2 -u test.py params1 &gt; nohup.out 2&gt;&amp;1 &amp;</span><br><span class="line">查看后台python：ps -aux | grep python</span><br></pre></td></tr></table></figure>
         </div>
 
         <blockquote class="post-copyright">
@@ -219,7 +214,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-06-04T05:53:52.537Z" itemprop="dateUpdated">2020-06-04 13:53:52</time>
+    最后更新时间：<time datetime="2020-07-28T06:39:23.941Z" itemprop="dateUpdated">2020-07-28 14:39:23</time>
 </span><br>
 
 
@@ -296,7 +291,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/static_blog/2020/06/04/18-Shell/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Shell</h4>
+      </a>
+    </div>
   
 
   

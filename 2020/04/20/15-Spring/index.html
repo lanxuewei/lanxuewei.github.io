@@ -21,18 +21,18 @@
     
     
     <meta name="keywords" content="技术,源码">
-    <meta name="description" content="一、Spring">
+    <meta name="description" content="一、Spring#####1、关于注解  @Component：组件，所有的Java Bean都可以认为是一个组件，交托给Spring管理，需要使用的地方使用 @Autowired 注入。 @Service：一般作为业务实现注解，表示业务实现层。 @Repository：表示dao层，并且将数据库相关异常进行了转化和封装，封装为Spring的数据访问异常类型。 @Controller：通常用于控制">
 <meta name="keywords" content="技术,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring">
 <meta property="og:url" content="http://yoursite.com/2020/04/20/15-Spring/index.html">
 <meta property="og:site_name" content="空谷小屋">
-<meta property="og:description" content="一、Spring">
+<meta property="og:description" content="一、Spring#####1、关于注解  @Component：组件，所有的Java Bean都可以认为是一个组件，交托给Spring管理，需要使用的地方使用 @Autowired 注入。 @Service：一般作为业务实现注解，表示业务实现层。 @Repository：表示dao层，并且将数据库相关异常进行了转化和封装，封装为Spring的数据访问异常类型。 @Controller：通常用于控制">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-21T09:38:52.822Z">
+<meta property="og:updated_time" content="2020-06-23T15:40:29.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring">
-<meta name="twitter:description" content="一、Spring">
+<meta name="twitter:description" content="一、Spring#####1、关于注解  @Component：组件，所有的Java Bean都可以认为是一个组件，交托给Spring管理，需要使用的地方使用 @Autowired 注入。 @Service：一般作为业务实现注解，表示业务实现层。 @Repository：表示dao层，并且将数据库相关异常进行了转化和封装，封装为Spring的数据访问异常类型。 @Controller：通常用于控制">
     
     <link rel="shortcut icon" href="/static_blog/favicon.ico">
     <link rel="stylesheet" href="/static_blog/css/style.css?v=1.7.2">
@@ -194,7 +194,29 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="一、Spring"><a href="#一、Spring" class="headerlink" title="一、Spring"></a>一、Spring</h4>
+            <h4 id="一、Spring"><a href="#一、Spring" class="headerlink" title="一、Spring"></a>一、Spring</h4><p>#####1、关于注解</p>
+<ol>
+<li><code>@Component</code>：组件，所有的Java Bean都可以认为是一个组件，交托给Spring管理，需要使用的地方使用 <code>@Autowired</code> 注入。</li>
+<li><code>@Service</code>：一般作为业务实现注解，表示业务实现层。</li>
+<li><code>@Repository</code>：表示dao层，并且将数据库相关异常进行了转化和封装，封装为Spring的数据访问异常类型。</li>
+<li><code>@Controller</code>：通常用于控制层，用于处理web端相关请求等。</li>
+<li><code>@Autowired</code>：自动注入，即在容器中查找匹配的Bean，当有且仅有一个匹配的Bean时，Spring会将其注入到<code>@Autowired</code>标注的变量中。</li>
+<li><code>@Async</code>：异步调用，该注解在方法上使用则表示该方法异步调用，如果在类上使用，则表示该类所有方法都异步调用。</li>
+<li><code>@EnableAsync</code>：开启异步调用。</li>
+<li><code>@Schedule</code>：定时任务。</li>
+<li><code>@Qualifier</code>：注入指定子类。</li>
+</ol>
+<p>注意：<code>@Schedule</code>和<code>@Async</code>注解不能同时存在于一个类中。</p>
+<p>10.<code>@Scope</code>：声明Spring Bean的作用域，使用方式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@Scope</span>(<span class="string">"singleton"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Person <span class="title">personSignleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Person();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中包含四种常见作用域：</p>
+<p>1、singleton：唯一bean实例，Spring中的bean默认都是单例的；</p>
+<p>2、prototype：每次请求都会创建一个新的bean实例；</p>
+<p>3、request：每一次Http请求都会产生一个新的bean，该bean仅在当前Http request内有效；</p>
+<p>4、session：每一次Http请求都会产生一个新的bean，该bean仅在当前Http session内有效；</p>
+</blockquote>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -202,7 +224,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-21T09:38:52.822Z" itemprop="dateUpdated">2020-04-21 17:38:52</time>
+    最后更新时间：<time datetime="2020-06-23T15:40:29.386Z" itemprop="dateUpdated">2020-06-23 23:40:29</time>
 </span><br>
 
 
