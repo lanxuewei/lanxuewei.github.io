@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="空谷小屋">
 <meta property="og:description" content="记录常用Linux、Windows命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2024-11-20T16:24:25.914Z">
+<meta property="og:updated_time" content="2024-11-20T16:37:21.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="命令人生——Linux、Windows">
 <meta name="twitter:description" content="记录常用Linux、Windows命令">
@@ -215,9 +215,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">每2s打印显卡使用情况：nvidia-smi -l 2</span><br></pre></td></tr></table></figure>
 <p><strong>3、查看硬件信息</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">windows搜索：dxdiag</span><br></pre></td></tr></table></figure>
-<p>三、Mac 相关命令</p>
-<p>1、修改文件创建时间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetFile -d &apos;01/23/2023 20:00:00&apos; /var/logs/keybagd.log</span><br></pre></td></tr></table></figure>
+<h4 id="三、Mac-相关命令"><a href="#三、Mac-相关命令" class="headerlink" title="三、Mac 相关命令"></a>三、Mac 相关命令</h4><p><strong>1、修改文件创建时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">命令：touch -t [[CC]YY]MMDDhhmm[.SS]</span><br><span class="line">举例：touch -t 202301012010.00 /Users/lanxuewei/test.md</span><br></pre></td></tr></table></figure>
+<p><strong>2、修改文件修改时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">举例：touch -mt 202301012010.00 /Users/lanxuewei/test.md</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -226,7 +227,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2024-11-20T16:24:25.914Z" itemprop="dateUpdated">2024-11-21 00:24:25</time>
+    最后更新时间：<time datetime="2024-11-20T16:37:21.940Z" itemprop="dateUpdated">2024-11-21 00:37:21</time>
 </span><br>
 
 
